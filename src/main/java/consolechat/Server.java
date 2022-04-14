@@ -30,7 +30,7 @@ public class Server implements TCPListenerInterface {
     @Override
     public synchronized void connectionReady(TCPConnection tcpConnection) {
         connections.add(tcpConnection);
-        sendAllGuys("Client connected: " + tcpConnection); /*Так как, мы складываем объект со строкой,
+        sendAllConnections("Client connected: " + tcpConnection); /*Так как, мы складываем объект со строкой,
         то у него неявно вызывается метод toString, а в классе
         TCPConnection мы переопределили метод toString,
         который возвращает нам строчку: адрес и порт*/
@@ -38,13 +38,13 @@ public class Server implements TCPListenerInterface {
 
     @Override
     public synchronized void receiveString(TCPConnection tcpConnection, String value) {
-        sendAllGuys(value);
+        sendAllConnections(value);
     }
 
     @Override
     public synchronized void disconnection(TCPConnection tcpConnection) {
         connections.remove(tcpConnection);
-        sendAllGuys("Client disconnect: " + tcpConnection);
+        sendAllConnections("Client disconnect: " + tcpConnection);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class Server implements TCPListenerInterface {
         System.out.println("TCP exception" + e);
     }
 
-    private void sendAllGuys(String msg) {
+    private void sendAllConnections(String msg) {
         for (TCPConnection connection : connections) {
             connection.sendMessage(msg);
         }
